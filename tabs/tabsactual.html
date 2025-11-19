@@ -1,0 +1,223 @@
+<style>
+	.tab-container {
+		background: #fff;
+		box-shadow: 0px 0px 100px 5px rgba(34, 60, 80, 0.3);
+	}
+	
+	.tab-container .tab {
+		overflow: hidden;
+		margin-bottom: 10px;
+		width: 100%;
+		background-color: #ffffff00;
+	}
+	/* Стили кнопок вкладок */
+	
+	.tab-container .tab button {
+		border: none;
+		border-bottom: 2px solid transparent !important;
+		background-color: #ffffff00;
+		float: left;
+		outline: none;
+		cursor: pointer;
+		padding: 10px 5px;
+		transition: 0.3s;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 16px;
+		color: #000;
+	}
+	/* При наведении */
+	
+	.tab-container .tab button:hover:not(:disabled):not(.active) {
+		border-bottom: 2px solid #19ff84 !important;
+		color: #000;
+	}
+	/* Активное состояние */
+	
+	.tab-container .tab button.active {
+		border: none;
+		border-bottom: 2px solid #4DD48B !important;
+		color: #000;
+	}
+	/* Скрытый таб */
+	
+	.tab-container .tab button.hidden {
+		display: none;
+	}
+	/* Таб с ошибкой - более мягкая красная рамка */
+.tab-container .tab button.tab-error {
+    border: 2px solid #ff7875 !important;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #000;
+}
+
+/* Активная вкладка с ошибкой - красная рамка + зеленая нижняя граница */
+.tab-container .tab button.tab-error.active {
+    border: 2px solid #ff7875 !important;
+    border-bottom: 3px solid #4DD48B !important;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #000;
+    font-weight: 600;
+}
+
+.tab-container .tab button.tab-error:hover:not(:disabled):not(.active) {
+    border: 2px solid #ffa39e !important;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #000;
+}
+
+/* Активная вкладка без ошибки - для контраста */
+.tab-container .tab button.active {
+    border: none;
+    border-bottom: 3px solid #4DD48B !important;
+    color: #000;
+    font-weight: 600;
+}
+	/*Иконка ошибки на табе */
+	/*.tab-container .tab button.has-error::before {
+    content: '⚠';
+    margin-right: 6px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+    /* Анимация для привлечения внимания к ошибке */
+	/*.tab-container .tab button.has-error {
+    animation: pulse-error 2s ease-in-out infinite;
+}*/
+	
+	@keyframes pulse-error {
+		0%,
+		100% {
+			box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.4);
+		}
+		50% {
+			box-shadow: 0 0 0 6px rgba(255, 77, 79, 0);
+		}
+	}
+	
+	.tab-container .tabcontent {
+		display: none;
+		padding: 6px 12px;
+		border-top: none;
+		animation: fadeEffect 1s;
+	}
+	
+	.tab-container .tabcontent.active {
+		display: block;
+	}
+	
+	@keyframes fadeEffect {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	
+	.custom-accordion .accordion-block {
+		margin-bottom: 25px;
+		background: #FFFFFF;
+		box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+		border-radius: 8px;
+	}
+	
+	.custom-accordion .accordion-button {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		height: 81px;
+		padding: 0 24px;
+		border: none;
+		cursor: pointer;
+		color: #232D42;
+		font-family: 'Inter', sans-serif;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 19px;
+		line-height: 175%;
+		background: #F5F6FA;
+		transition: 0.4s;
+	}
+	
+	.custom-accordion .accordion-button:after {
+		content: '';
+		float: right;
+		width: 24px;
+		height: 24px;
+		background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAyNCAyNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5IDlMMTIgMTZMNSA5IiBzdHJva2U9IiMyMzJENDIiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==') no-repeat center;
+		transition: 0.3s;
+	}
+	
+	.custom-accordion .accordion-button.active:after {
+		transform: rotate(180deg);
+	}
+	
+	.custom-accordion .accordion-button:hover {
+		color: #597ef7;
+	}
+	
+	.custom-accordion .accordion-body {
+		padding: 0 24px;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.2s ease-out;
+	}
+	
+	.custom-accordion .accordion-body .asf-container {
+		margin-top: 10px;
+	}
+	
+	.custom-accordion .accordion-footer {
+		background: #fff;
+		height: 30px;
+	}
+	
+	.buttons-container {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+	}
+	/* Стили для кнопок "Далее" и "Назад" */
+	
+	.button-next,
+	.button-prev {
+		display: inline-block;
+		padding: 10px 50px;
+		background-color: #497a49;
+		color: #fff;
+		border: 2px solid;
+		border-radius: 8px;
+		font-size: 16px;
+		cursor: pointer;
+		transition: background-color 0.3s ease, color 0.3s ease;
+		margin-top: 10px;
+		margin-right: 10px;
+	}
+	
+	.button-next:disabled,
+	.button-prev:disabled {
+		background-color: #ccc;
+		color: #666;
+		cursor: not-allowed;
+	}
+	
+	.button-next:hover:not(:disabled),
+	.button-prev:hover:not(:disabled) {
+		background-color: #fff;
+		color: #497a49;
+	}
+	
+	.button-next:focus,
+	.button-prev:focus {
+		outline: none;
+	}
+
+    
+</style>
