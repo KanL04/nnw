@@ -5,94 +5,84 @@
 	}
 	
 	.tab-container .tab {
-		overflow: hidden;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0;
 		margin-bottom: 10px;
 		width: 100%;
 		background-color: #ffffff00;
+		padding: 10px 0;
 	}
-	/* Стили кнопок вкладок */
 	
+	/* Стили кнопок вкладок */
 	.tab-container .tab button {
+		flex: 1 1 auto;
+		min-width: 180px;
+		max-width: 280px;
 		border: none;
 		border-bottom: 2px solid transparent !important;
 		background-color: #ffffff00;
-		float: left;
 		outline: none;
 		cursor: pointer;
-		padding: 10px 5px;
+		padding: 10px 15px;
 		transition: 0.3s;
 		font-style: normal;
 		font-weight: normal;
 		font-size: 14px;
 		line-height: 16px;
 		color: #000;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
 	}
-	/* При наведении */
 	
+	/* При наведении */
 	.tab-container .tab button:hover:not(:disabled):not(.active) {
 		border-bottom: 2px solid #19ff84 !important;
 		color: #000;
 	}
-	/* Активное состояние */
 	
+	/* Активное состояние */
 	.tab-container .tab button.active {
 		border: none;
-		border-bottom: 2px solid #4DD48B !important;
+		border-bottom: 3px solid #4DD48B !important;
 		color: #000;
+		font-weight: 600;
 	}
-	/* Скрытый таб */
 	
+	/* Скрытый таб */
 	.tab-container .tab button.hidden {
 		display: none;
 	}
+	
 	/* Таб с ошибкой - более мягкая красная рамка */
-.tab-container .tab button.tab-error {
-    border: 2px solid #ff7875 !important;
-    border-radius: 4px;
-    background-color: transparent;
-    color: #000;
-}
+	.tab-container .tab button.has-error {
+		border: 2px solid #ff7875 !important;
+		border-radius: 4px;
+		background-color: transparent;
+		color: #000;
+	}
 
-/* Активная вкладка с ошибкой - красная рамка + зеленая нижняя граница */
-.tab-container .tab button.tab-error.active {
-    border: 2px solid #ff7875 !important;
-    border-bottom: 3px solid #4DD48B !important;
-    border-radius: 4px;
-    background-color: transparent;
-    color: #000;
-    font-weight: 600;
-}
+	/* Активная вкладка с ошибкой - красная рамка + зеленая нижняя граница */
+	.tab-container .tab button.has-error.active {
+		border: 2px solid #ff7875 !important;
+		border-bottom: 3px solid #4DD48B !important;
+		border-radius: 4px;
+		background-color: transparent;
+		color: #000;
+		font-weight: 600;
+	}
 
-.tab-container .tab button.tab-error:hover:not(:disabled):not(.active) {
-    border: 2px solid #ffa39e !important;
-    border-radius: 4px;
-    background-color: transparent;
-    color: #000;
-}
-
-/* Активная вкладка без ошибки - для контраста */
-.tab-container .tab button.active {
-    border: none;
-    border-bottom: 3px solid #4DD48B !important;
-    color: #000;
-    font-weight: 600;
-}
-	/*Иконка ошибки на табе */
-	/*.tab-container .tab button.has-error::before {
-    content: '⚠';
-    margin-right: 6px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-    /* Анимация для привлечения внимания к ошибке */
-	/*.tab-container .tab button.has-error {
-    animation: pulse-error 2s ease-in-out infinite;
-}*/
+	.tab-container .tab button.has-error:hover:not(:disabled):not(.active) {
+		border: 2px solid #ffa39e !important;
+		border-radius: 4px;
+		background-color: transparent;
+		color: #000;
+	}
 	
 	@keyframes pulse-error {
-		0%,
-		100% {
+		0%, 100% {
 			box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.4);
 		}
 		50% {
@@ -184,8 +174,8 @@
 		justify-content: flex-end;
 		gap: 10px;
 	}
-	/* Стили для кнопок "Далее" и "Назад" */
 	
+	/* Стили для кнопок "Далее" и "Назад" */
 	.button-next,
 	.button-prev {
 		display: inline-block;
@@ -219,5 +209,26 @@
 		outline: none;
 	}
 
-    
+	/* Адаптивность для планшетов */
+	@media (max-width: 1024px) {
+		.tab-container .tab button {
+			min-width: 150px;
+			max-width: 220px;
+			font-size: 13px;
+			padding: 10px 12px;
+		}
+	}
+
+	/* Адаптивность для мобильных */
+	@media (max-width: 768px) {
+		.tab-container .tab {
+			flex-direction: column;
+			gap: 6px;
+		}
+		
+		.tab-container .tab button {
+			min-width: 100%;
+			max-width: 100%;
+		}
+	}
 </style>

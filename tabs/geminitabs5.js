@@ -1,3 +1,10 @@
+/*
+   ФИНАЛЬНАЯ ВЕРСИЯ 5.0 (FIXED LISTBOX)
+   1. Валидация listbox теперь смотрит ТОЛЬКО на значение (игнорирует сломанные ключи)
+   2. Валидация по индексу (для динамических таблиц)
+   3. manualCheckIds
+*/
+
 async function setVisibleEl() {
     if (!model || !model.cmps || !Array.isArray(model.cmps)) return;
 

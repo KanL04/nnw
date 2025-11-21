@@ -1,3 +1,10 @@
+/*
+   ФИНАЛЬНАЯ ВЕРСИЯ 5.0 (FIXED LISTBOX)
+   1. Валидация listbox теперь смотрит ТОЛЬКО на значение (игнорирует сломанные ключи)
+   2. Валидация по индексу (для динамических таблиц)
+   3. manualCheckIds
+*/
+
 async function setVisibleEl() {
     if (!model || !model.cmps || !Array.isArray(model.cmps)) return;
 
@@ -106,7 +113,7 @@ function tabs() {
     };
 
    // === ФУНКЦИЯ ПРОВЕРКИ С ЛОГАМИ ДЛЯ ДИНАМИЧЕСКИХ ТАБЛИЦ ===
-const checkRequiredFields = (tabIndex) => {
+    const checkRequiredFields = (tabIndex) => {
         const tabData = tabsData[tabIndex];
         if (!tabData) return { hasRequired: false, hasEmpty: false };
 
@@ -114,6 +121,13 @@ const checkRequiredFields = (tabIndex) => {
         let hasEmpty = false;
 
         const allBlocks = getAllTabBlocks(tabData);
+
+        // Включаем логи только для вкладки "Сведения об образовании"
+        const isDebug = tabData.name === 'Сведения об образовании';
+
+        if (isDebug) {
+            console.log('--- START DEBUG: ' + tabData.name + ' ---');
+        }
 
         allBlocks.forEach(blockId => {
             try {
@@ -123,24 +137,58 @@ const checkRequiredFields = (tabIndex) => {
                     const isBlockVisible = !blockView.tableModel.hasOwnProperty('visible') || blockView.tableModel.visible !== false;
                     if (!isBlockVisible) return;
 
+                    // Получаем данные
                     const properties = blockView.tableModel.asfProperty.properties;
                     const modelBlocks = blockView.tableModel.modelBlocks;
 
-                    // Логика для динамических таблиц
+                    // --- ЛОГИКА ДЛЯ ТАБЛИЦ ---
                     if (properties && Array.isArray(properties) && modelBlocks && Array.isArray(modelBlocks)) {
+                        
+                        if (isDebug) {
+                            console.log('Block ID: ' + blockId);
+                            console.log('Type: Table (Common or Appendable)');
+                            console.log('Rows count: ' + modelBlocks.length);
+                            console.log('Properties count: ' + properties.length);
+                        }
+
+                        // Фильтруем только видимые и обязательные свойства
                         const requiredProps = properties.filter(prop => {
                             const isVisible = !prop.hasOwnProperty('visible') || prop.visible !== false;
                             const isRequired = prop.required === true && prop.type !== 'label';
                             return isVisible && isRequired;
                         });
 
-                        modelBlocks.forEach((row) => {
+                        if (isDebug) {
+                            console.log('Required visible properties count: ' + requiredProps.length);
+                        }
+
+                        // 1. Перебираем строки данных
+                        modelBlocks.forEach((row, rowIndex) => {
                             if (Array.isArray(row)) {
+                                if (isDebug) console.log('>>> Checking Row #' + rowIndex + ' (cells: ' + row.length + ')');
+
+                                // 2. Перебираем ТОЛЬКО обязательные свойства
                                 requiredProps.forEach((prop) => {
+                                    // Находим индекс свойства в оригинальном массиве properties
                                     const colIndex = properties.indexOf(prop);
+                                    
+                                    if (isDebug) {
+                                        console.log('   Checking property ID: ' + prop.id + ' at column index: ' + colIndex);
+                                    }
+
+                                    // Берем ячейку по индексу
                                     const cellModel = row[colIndex];
 
+                                    if (isDebug) {
+                                        if (cellModel) {
+                                            console.log('   Cell found. Value: "' + cellModel.value + '", Key: "' + cellModel.key + '"');
+                                        } else {
+                                            console.log('   Cell NOT FOUND at index ' + colIndex);
+                                        }
+                                    }
+
                                     if (cellModel) {
+                                        // Проверяем видимость самой ячейки
                                         let isFieldVisible = true;
                                         if (cellModel.hasOwnProperty('visible') && cellModel.visible === false) {
                                             isFieldVisible = false;
@@ -148,34 +196,36 @@ const checkRequiredFields = (tabIndex) => {
 
                                         if (isFieldVisible) {
                                             hasRequired = true;
+
                                             const fakeView = { 
                                                 model: cellModel,
                                                 tableModel: blockView.tableModel 
                                             };
+
                                             const valid = isFieldValid(fakeView, prop.type);
+                                            
+                                            if (isDebug) console.log('   Is Valid? ' + valid);
+
                                             if (!valid) {
                                                 hasEmpty = true;
-                                                // Минимальное логирование для отладки в продакшене
-                                                if (console && console.debug) {
-                                                    console.debug('Tab validation:', {
-                                                        tab: tabData.name,
-                                                        field: prop.id,
-                                                        value: cellModel.value,
-                                                        key: cellModel.key
-                                                    });
-                                                }
+                                                if (isDebug) console.warn('   !!! ERROR: Field is empty/invalid !!!');
                                             }
+                                        } else {
+                                            if (isDebug) console.log('   Skipped (Cell Hidden)');
                                         }
+                                    } else {
+                                        if (isDebug) console.warn('   !!! CELL MODEL MISSING - This may indicate index mismatch !!!');
                                     }
                                 });
                             }
                         });
                     }
-                    // Логика для обычных блоков
+                    // --- СТАРАЯ ЛОГИКА (если это не таблица) ---
                     else if (!modelBlocks) {
                          if (properties && Array.isArray(properties)) {
                             properties.forEach(prop => {
                                 if (prop.required === true && prop.type !== 'label') {
+                                    // Проверяем видимость на уровне свойства
                                     const isPropVisible = !prop.hasOwnProperty('visible') || prop.visible !== false;
                                     if (!isPropVisible) return;
 
@@ -199,6 +249,10 @@ const checkRequiredFields = (tabIndex) => {
                 console.warn('Error checking block:', blockId, e);
             }
         });
+
+        if (isDebug) {
+            console.log('--- RESULT: hasRequired=' + hasRequired + ', hasEmpty=' + hasEmpty + ' ---');
+        }
 
         return { hasRequired, hasEmpty };
     };

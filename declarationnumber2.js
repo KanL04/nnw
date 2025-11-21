@@ -21,9 +21,9 @@ function delay(ms) {
 
 try {
     let currentFormData = API.getFormData(dataUUID);
-    let textbox_certificate_number = UTILS.getValue(currentFormData, "textbox_certificate_number");
+    let textbox_certificate_number = UTILS.getValue(currentFormData, "textbox_declaration_number");
     let textbox_number_att = UTILS.getValue(currentFormData, "textbox_number_att");
-    let type_of_certification = UTILS.getValue(currentFormData, "listbox_type_of_certification");
+    let type_of_certification = UTILS.getValue(currentFormData, "listbox-type_of_certification");
     let listbox_Region_according_to_ST_RK_3_11 = UTILS.getValue(currentFormData, "listbox_Region_according_to_ST_RK_3_11");
     let textbox_accr_numb = UTILS.getValue(currentFormData, "textbox_accr_numb");
     let textbox_num_eokno = UTILS.getValue(currentFormData, "textbox_num_eokno");
@@ -40,7 +40,7 @@ try {
             incrementedNumber = ('00000' + (Number(textbox_num_eokno.value) + 1)).slice(-5);
         }
     } else {
-        //   защита от race condition
+        // защита от race condition
         while (!success && retryCount < maxRetries) {
             // Делаем паузу перед повторной попыткой
             if (retryCount > 0) {
@@ -49,16 +49,16 @@ try {
             }
 
             // ГЕНЕРИРУЕМ НОВЫЙ НОМЕР
-            let urlSearch = 'rest/api/registry/data_ext?registryCode=certificates_reg_eaeu&fields=textbox_num&field=textbox_accr_numb&condition=TEXT_EQUALS&value=' + textbox_accr_numb.value;
+            let urlSearch = 'rest/api/registry/data_ext?registryCode=eaeu_production_conformity_declaration&fields=textbox_num&field=textbox_accr_numb&condition=TEXT_EQUALS&value=' + textbox_accr_numb.value;
             let res = API.httpGetMethod(urlSearch);
             let certificateNumber = getMaxCertificateNumber(res);
             incrementedNumber = ('00000' + (certificateNumber + 1)).slice(-5);
 
-            // ФОРМИРУЕМ ПОЛНЫЙ НОМЕР СЕРТИФИКАТА
+            // ФОРМИРУЕМ ПОЛНЫЙ НОМЕР ДЕКЛАРАЦИИ
             if (type_of_certification.key == "1") {
-                textbox_certificate_number.value = "ЕАЭС KZ." + listbox_Region_according_to_ST_RK_3_11.key + textbox_number_att.value.slice(-3) + ".01.01." + incrementedNumber;
+                textbox_certificate_number.value = "ЕАЭС KZ." + listbox_Region_according_to_ST_RK_3_11.key + textbox_number_att.value.slice(-3) + ".13.12." + incrementedNumber;
             } else if (type_of_certification.key == "2" || type_of_certification.key == "3") {
-                textbox_certificate_number.value = "ЕАЭС KZ." + listbox_Region_according_to_ST_RK_3_11.key + textbox_number_att.value.slice(-3) + ".05.01." + incrementedNumber;
+                textbox_certificate_number.value = "ЕАЭС KZ." + listbox_Region_according_to_ST_RK_3_11.key + textbox_number_att.value.slice(-3) + ".13.12." + incrementedNumber;
             }
 
             // СОХРАНЯЕМ ДАННЫЕ
@@ -70,11 +70,11 @@ try {
                 ]
             });
 
-            // ДАЁМ ВРЕМЯ НА СОХРАНЕНИЕ В БД
+            // ДАЕМ ВРЕМЯ НА СОХРАНЕНИЕ В БД
             delay(100);
 
             // ПРОВЕРЯЕМ ПОСЛЕ СОХРАНЕНИЯ
-            let urlCheck = 'rest/api/registry/data_ext?registryCode=certificates_reg_eaeu&fields=textbox_num,textbox_certificate_number&field=textbox_accr_numb&condition=TEXT_EQUALS&value=' + textbox_accr_numb.value;
+            let urlCheck = 'rest/api/registry/data_ext?registryCode=eaeu_production_conformity_declaration&fields=textbox_num,textbox_declaration_number&field=textbox_accr_numb&condition=TEXT_EQUALS&value=' + textbox_accr_numb.value;
             urlCheck += '&field=textbox_num&condition=TEXT_EQUALS&value=' + incrementedNumber;
             
             let checkRes = API.httpGetMethod(urlCheck);
@@ -94,7 +94,7 @@ try {
         }
     }
 
-    message = "Номер сертификата сформирован: " + textbox_certificate_number.value;
+    message = "Номер декларации сформирован: " + textbox_certificate_number.value;
 
 } catch (err) {
     result = false;
