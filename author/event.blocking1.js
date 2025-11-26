@@ -25,8 +25,8 @@ try {
             var url = "rest/api/registry/data_ext?";
             url += "registryCode=" + registryCode;
             
-            // Ищем userID (Автор документа)
-            url += "&field=userID"; 
+            url += "&field=" + fieldName;
+
             
             url += "&condition=TEXT_EQUALS";
             url += "&key=" + employeeID; //  ID сотрудника

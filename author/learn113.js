@@ -1,13 +1,15 @@
 var result = true;
 var message = "ok";
 
+
+// РЕЕСТРЫ И ПОЛЯ ДЛЯ ОБНОВЛЕНИЯ
 var REGISTRIES_CONFIG = [
-    
+    // 1 Группа. область аккредитации
     // { registryCode: 'scope_accreditation', fieldName: 'entity_author' },
     // { registryCode: 'passport_accreditation', fieldName: 'entity_author' },
     // { registryCode: 'information_related_to_the_organization_and_personnel', fieldName: 'entity_user' },
     // { registryCode: 'warehouse', fieldName: 'entity_author' },
-     // 1 Группа. область аккредитации
+    // 1 Группа. область аккредитации
     { registryCode: 'reg_passport_accreditation', fieldName: 'entity_author' },
     { registryCode: 'registr_scope_accreditation_conformity_processes_halal', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_quality_management_systems', fieldName: 'entity_author' },
@@ -86,12 +88,16 @@ var REGISTRIES_CONFIG = [
 
 
 ];
+// --- ФУНКЦИИ --- для смены автора записей реестров
 try {
+    // Для получения данных формы текущего события
     let currentFormData = API.getFormData(dataUUID);
     // let entity_employee = UTILS.getValue(
     //     currentFormData,
     //     "entity_employee"
     // );
+
+    // Действие из списка. UTILS.getValue возвращает объект поля(type, value, key)
     let listbox_action = UTILS.getValue(
         currentFormData,
         "listbox_action"
@@ -131,16 +137,22 @@ try {
     //         );
     //     message += '/n' + textbox_patronymic.value;
     // }
+
+
     if (listbox_action.key == 4) {
         // Смена автора записей реестров при регистрации нового руководителя
         // new actualization 2025-11-25
+
+
+
+// Извлекает  форму увольнения с данными уволенного сотрудника:
+// Организация, текущий руководитель, ИИН уволенного сотрудника
 
         let reg = UTILS.getValue(currentFormData, "reglink_delete");
         if (!reg || !reg.hasOwnProperty('key')) throw new Error('Error - not found');
         message = JSON.stringify(listbox_action);
 
         let discharge_user_reg = API.getFormData(API.getAsfDataId(reg.key));
-
 
         // Получение организации и текущего руководителя
         let organization = discharge_user_reg.data;
@@ -177,11 +189,13 @@ try {
             }
         }
 
-
+// Поиск пользователя по ИИН и получаем userID увольняемого сотрудника
+// Формирует поинтер IIN<номер> и получает userID
 
         let dischargeUserRequest = API.checkExistence('IIN' + IIN.value);
         dischargedUserID = dischargeUserRequest.list[0].userID
 
+// поиск всех записей реестра, где автор = увольняемый сотрудник
         function getRecordsByManager(registryCode, fieldName, oldManagerID) {
             try {
                 var url = "rest/api/registry/data_ext?";
@@ -189,6 +203,7 @@ try {
                 url += "&field=" + fieldName;
                 url += "&condition=TEXT_EQUALS";
                 url += "&key=" + oldManagerID;
+                // &loadData=false - чтобы не тянуть данные формы(полные данные), а только метаданные(DataUUID, documentID)
                 url += "&loadData=false";
 
                 var response = API.httpGetMethod(url);
@@ -199,6 +214,8 @@ try {
         }
         function updateRecordManager(dataUUID, fieldName, newManagerID) {
             try {
+                // Обновление автора записи. Получаем ФИО Руководителя
+                // mergeForamData для частичного обновления и обновляем поле entity (автор) на руководителя
 
                 var getFullName = API.getUserInfo(newManagerID)
 
@@ -216,6 +233,9 @@ try {
                 return { success: false, uuid: dataUUID, error: err.message };
             }
         }
+
+        // Обработка каждого реестра из списка по очереди. Получаем все записи, и вызываем для каждой записи updateRecordManager
+        // + статистика по обработке totalRecords, successCount, failedCount, documentIDS, errors 
         function processRegistry(registryConfig, oldManagerID, newManagerID) {
             var stats = {
                 registryCode: registryConfig.registryCode,
@@ -274,8 +294,11 @@ try {
             return stats;
         }
 
+        // Обработка всех реестров. То есть обработка обязательных полей и проверка что ID не совпадают
+
         function changeManagerInAllRegistries(oldManagerID, newManagerID) {
             var totalStats = {
+                // Общая статистика по всему процессу
                 startTime: new Date().toISOString(),
                 oldManagerID: oldManagerID,
                 newManagerID: newManagerID,
@@ -298,6 +321,8 @@ try {
             }
 
             try {
+
+                // Цикл обработки всех реестров из конфига REGISTRIES_CONFIG
                 for (var i = 0; i < REGISTRIES_CONFIG.length; i++) {
                     var registryConfig = REGISTRIES_CONFIG[i];
 
@@ -334,7 +359,7 @@ try {
 
         // Выполнение смены руководителя
         var executionStats = changeManagerInAllRegistries(oldManagerID, newManagerID);
-
+        // Увольнение сотрудника / поиск должности "сотрудника" и снятие по API.dichargePosition
         let getUserPosition = API.getUserInfo(dischargedUserID);
         var positions = getUserPosition.positions;
         var positionID = null;
@@ -411,4 +436,3 @@ try {
     result = false;
     message = "Ошибка:" + err.message;
 }
-

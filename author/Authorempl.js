@@ -2,21 +2,20 @@ var result = true;
 var message = "ok";
 
 var REGISTRIES_CONFIG = [
-    
-    // { registryCode: 'scope_accreditation', fieldName: 'entity_author' },
-    // { registryCode: 'passport_accreditation', fieldName: 'entity_author' },
-    // { registryCode: 'information_related_to_the_organization_and_personnel', fieldName: 'entity_user' },
-    // { registryCode: 'warehouse', fieldName: 'entity_author' },
-     // 1 Группа. область аккредитации
+    { registryCode: 'scope_accreditation', fieldName: 'entity_author' },
+    { registryCode: 'passport_accreditation', fieldName: 'entity_author' },
+    { registryCode: 'information_related_to_the_organization_and_personnel', fieldName: 'entity_user' },
+    { registryCode: 'warehouse', fieldName: 'entity_author' },
     { registryCode: 'reg_passport_accreditation', fieldName: 'entity_author' },
     { registryCode: 'registr_scope_accreditation_conformity_processes_halal', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_quality_management_systems', fieldName: 'entity_author' },
-    { registryCode: 'registry_scope_accreditation_environmental_management_systems', fieldName: 'entity_author' },
+    { registryCode: 'registry_scope_accreditation_enviromental_management_systems', fieldName: 'entity_author' },
     { registryCode: 'form_scope_accreditation_energy_management_system', fieldName: 'entity_author' },
-    { registryCode: 'form3_accreditation_health_safety', fieldName: 'entity_author' },
+    { registryCode: 'form3_accreditation_food_safety', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_information_security_management', fieldName: 'entity_author' },
-    { registryCode: 'registry_scope_accreditation_information_security_management_system', fieldName: 'entity_author' },
+    { registryCode: 'registry_scope_accreditation_ISMS', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_quality_management_system_medical_devices', fieldName: 'entity_author' },
+    // { registryCode: 'form', fieldName: 'entity_author' },
     { registryCode: 'register_accreditation_occupational_safety_management_system', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_laboratory', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_calibr_laboratory1', fieldName: 'entity_author' },
@@ -24,67 +23,16 @@ var REGISTRIES_CONFIG = [
     { registryCode: 'registr_scope_accreditation_conformity_agriculture_GAP', fieldName: 'entity_author' },
     { registryCode: 'registr_scope_accreditation_staff_conformity', fieldName: 'entity_author' },
     { registryCode: 'registr_scope_accreditation_conformity_products_processes_services', fieldName: 'entity_author' },
-    { registryCode: 'scope_addition_il_reg', fieldName: 'entity_author' },
+    { registryCode: 'scope_audition_it_reg', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_proficiency_testing_provider', fieldName: 'entity_author' },
     { registryCode: 'register_new_management_scheme_application', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_inspection_body', fieldName: 'entity_author' },
     { registryCode: 'registry_social_responsibility_management_system', fieldName: 'entity_author' },
     { registryCode: 'registry_scope_accreditation_GHG_laboratory', fieldName: 'entity_author' },
     { registryCode: 'register_accreditation_food_products_safety', fieldName: 'entity_author' },
-    { registryCode: 'registr_scope_accreditation_conformity_processes_products', fieldName: 'entity_author' },
-    { registryCode: 'registry_oblasti_akkreditatsii_organa_po_validatsii_i_verifikatsii_parnikovyh_gazov', fieldName: 'entity_author' },
-    // 2 Группа. Cведения паспорта
-    { registryCode: 'Deleting_scope', fieldName: 'entity_author' },
-    { registryCode: 'registry_making_changes_to_passport_data', fieldName: 'entity_author' },
-    { registryCode: 'list_used_standart', fieldName: 'entity_author' },
-    { registryCode: 'registry_list_of_regulatory_documents_reest', fieldName: 'entity_author' },
-    { registryCode: 'information_lithen', fieldName: 'entity_author' },
-    { registryCode: 'information_personal', fieldName: 'entity_author' },
-    { registryCode: 'information_industrial_premises', fieldName: 'entity_author' },
-    { registryCode: 'details_measuring_instruments', fieldName: 'entity_author' },
-    { registryCode: 'detalies_test_equipment', fieldName: 'entity_author' },
-    { registryCode: 'information_equipment_laboratory_standardn', fieldName: 'entity_author' },
-    { registryCode: 'reg_information_equipment', fieldName: 'entity_author' },
-    { registryCode: 'reg_information_transport', fieldName: 'entity_author' },
-    { registryCode: 'Deleting_passport_data', fieldName: 'entity_author' },
-    // 3 группа. Сведения связанные с организацией и персоналом
-    { registryCode: 'documents_sm_accreditation', fieldName: 'entity_author' },
-    { registryCode: 'information_lithen', fieldName: 'entity_author' },
-    { registryCode: 'information_structural_subdivisions', fieldName: 'entity_author' },
-    { registryCode: 'information_organization', fieldName: 'entity_author' },
-    // 4 группа .Метрология - склад
-    { registryCode: 'registries_measurement_methods', fieldName: 'entity_supervisor' },
-    { registryCode: 'reg_methods_verification_measuring_instruments', fieldName: 'entity_supervisor' },
-    { registryCode: 'Verifiers_of_measuring_instruments', fieldName: 'entity_supervisor' },
-    { registryCode: 'registries_measuring_methods_passed_metrological_certification', fieldName: 'entity_supervisor' },
-    { registryCode: 'registries_approved_types_of_measuring_instruments', fieldName: 'entity_supervisor' },
-    { registryCode: 'registries_approved_types_of_standard_samples', fieldName: 'entity_supervisor' },
-    { registryCode: 'Scientists_keepers_of_the_state_standards_of_units_of_quantities', fieldName: 'entity_supervisor' },
-    { registryCode: 'register_standards_of_units_of_quantities', fieldName: 'entity_supervisor' },
-    { registryCode: 'Application_for_admission_to_the_use_of_foreign_type_CO', fieldName: 'entity_supervisor' },
-    { registryCode: 'register_approved_types_of_measuring_instruments', fieldName: 'entity_author' },
-    { registryCode: 'register_of_measuring_instruments_that_have_passed_metrological_certification', fieldName: 'entity_author' },
-    { registryCode: 'application_for_extension_of_the_MVI', fieldName: 'entity_author' },
-    { registryCode: 'measurement_methods', fieldName: 'entity_author' },
-    { registryCode: 'register_of_approved_types_of_standard_samples', fieldName: 'entity_author' },
-    { registryCode: 'register_of_application_consideration_for_certification_recertification_verifiers', fieldName: 'entity_author' },
-    { registryCode: 'tehnicheskoe_zadanie_na_razrabotku_gso', fieldName: 'entity_author' },
-    { registryCode: 'registry_application_scientists_keepers_state_standards', fieldName: 'entity_author' },
-    { registryCode: 'registry_application_standards_of_units_of_quantities', fieldName: 'entity_author' },
-    { registryCode: 'registry_cancellation_of_labels', fieldName: 'entity_author' },
-    { registryCode: 'register_brass_brands', fieldName: 'entity_author' },
-    { registryCode: 'register_metal_brands', fieldName: 'entity_author' },
-    { registryCode: 'register_plastic_seals', fieldName: 'entity_author' },
-    { registryCode: 'register_self_adhesive_labels', fieldName: 'entity_author' },
-    { registryCode: 'registry_certificate_replacement', fieldName: 'entity_author' },
-    { registryCode: 'register_production_of_verification_stamps', fieldName: 'entity_author' },
-    { registryCode: 'registry_unsuitability_notice', fieldName: 'entity_author' },
-    { registryCode: 'registry_certificate_revocation', fieldName: 'entity_author' },
-    { registryCode: 'registry_certificate', fieldName: 'entity_author' },
-    { registryCode: 'shablon_sertifikata_o_poverke', fieldName: 'entity_author' },
-
-
-
+    { registryCode: 'register_accreditation_conformity_processes_products', fieldName: 'entity_author' },
+    { registryCode: 'registry_obtain_accreditation_certificate_halal_parnikov', fieldName: 'entity_author' },
+    { registryCode: 'registry_oblasti_akkreditatsii_organa_po_validatsii_i_verifikatsii_parnikovyh_gazov', fieldName: 'entity_author' }
 ];
 try {
     let currentFormData = API.getFormData(dataUUID);
@@ -140,7 +88,6 @@ try {
         message = JSON.stringify(listbox_action);
 
         let discharge_user_reg = API.getFormData(API.getAsfDataId(reg.key));
-
 
         // Получение организации и текущего руководителя
         let organization = discharge_user_reg.data;
@@ -326,28 +273,14 @@ try {
 
         var oldManagerID = dischargedUserID;
         var newManagerID = currentManager;
-        // var oldManagerID = 'd1934af5-fae8-4ea2-9ab4-f58750d755fe';
-        // var newManagerID = '2ca997ca-f7c4-483e-bbba-e420574a2ab2';
+
         if (!oldManagerID || !newManagerID) {
             throw new Error("Не указаны обязательные параметры: oldManagerID или newManagerID");
         }
 
         // Выполнение смены руководителя
         var executionStats = changeManagerInAllRegistries(oldManagerID, newManagerID);
-
-        let getUserPosition = API.getUserInfo(dischargedUserID);
-        var positions = getUserPosition.positions;
-        var positionID = null;
-
-        for (var i = 0; i < positions.length; i++) {
-            if (positions[i].positionName === "Сотрудники") {
-                positionID = positions[i].positionID;
-                break;
-            }
-        }
-        let doDischargePosition = API.dischargePosition(dischargedUserID, positionID);
-
-        message = JSON.stringify(doDischargePosition);
+        message = JSON.stringify(executionStats);
 
         // }
 
@@ -411,4 +344,3 @@ try {
     result = false;
     message = "Ошибка:" + err.message;
 }
-
